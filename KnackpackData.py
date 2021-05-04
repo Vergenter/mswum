@@ -1,7 +1,7 @@
 import random
 import numpy as np
 from numba.types import Omitted
-from numba import jit,njit, prange,boolean,int32,int64,float32
+from numba import jit,njit, prange,boolean,int32,float32
 
 # Treated as constants by numba
 np.random.seed(seed=1337)
@@ -14,7 +14,7 @@ items_size_threshold = 0.5
 
 @njit([boolean[::1](int32)])
 def encodeNumber(number):
-    return np.array([bool(number & (1<<(n_items-1-x))) for x in range(n_items)],dtype=boolean)
+    return np.array([bool(number & (1<<(n_items-1-x))) for x in prange(n_items)],dtype=boolean)
 
 @njit([float32(boolean[::1])])
 def scoreFunction(mask):
@@ -27,9 +27,9 @@ def scoreFunction(mask):
     return -1 if final_weight > max_weight else score
 
 @njit([float32[::1]()])
-def getDataScores():
-    return np.array([scoreFunction(encodeNumber(x)) for x in range(max_value)],dtype=float32)
+def getScores():
+    return np.array([scoreFunction(encodeNumber(x)) for x in prange(max_value)],dtype=float32)
 
 @njit([boolean[:,::1]()])
-def getData():
-    return np.array([[bool(number & (1<<(n_items-1-x))) for x in range(n_items)] for number in range(max_value)],dtype=boolean)
+def getEncoded():
+    return np.array([[boolean(number & (1<<(n_items-1-x))) for x in prange(n_items)] for number in prange(max_value)],dtype=boolean)
