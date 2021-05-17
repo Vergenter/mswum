@@ -33,3 +33,15 @@ def getScores():
 @njit([boolean[:,::1]()]) # return 2d boolean array
 def getEncoded():
     return np.array([[boolean(number & (1<<(n_items-1-x))) for x in prange(n_items)] for number in prange(max_value)],dtype=boolean)
+
+def getDiff(items, value, weight):
+    ''' Najlepsze wartości dla max_weight = 3 '''
+    return {
+        15: [5.49080145 - value, 2.9546001 - weight],
+        16: [4.9966826 - value, 2.89531816 - weight],
+        17: [5.52658400 - value, 2.73215318 - weight],
+        18: [4.78183345 - value, 2.93022193 - weight],
+        19: [6.75288864 - value, 2.86703331 - weight],
+        20: [6.06210077 - value, 2.97760480 - weight],
+        21: [4.74507627 - value, 2.93439350 - weight],
+    }[items]
