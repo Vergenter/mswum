@@ -5,10 +5,17 @@ from numba import jit, njit, prange, boolean, int32, float32
 from DataGenerator import get_random_correlation
 
 # Treated as constants by numba
+# max_weight = 3
+# n_items = 16
+# max_value = (2 ** n_items)
+# weights, values = get_random_correlation(n_items, 0.1)
+# items_size_threshold = 0.5
+np.random.seed(seed=1337)
 max_weight = 3
 n_items = 16
-max_value = (2 ** n_items)
-weights, values = get_random_correlation(n_items, 0.1)
+max_value = (2**n_items) 
+weights =  np.random.rand(n_items)
+values = np.random.rand(n_items)
 items_size_threshold = 0.5
 
 
