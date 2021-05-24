@@ -2,13 +2,13 @@ import random
 import numpy as np
 from numba.types import Omitted
 from numba import jit, njit, prange, boolean, int32, float32
-from DataGenerator import get_random_correlation
+from DataGenerator import read_data_from_file
 
 # Treated as constants by numba
 max_weight = 3
 n_items = 16
 max_value = (2 ** n_items)
-weights, values = get_random_correlation(n_items, 0.1)
+weights, values = read_data_from_file('Data/low_correlation_16')
 items_size_threshold = 0.5
 
 
