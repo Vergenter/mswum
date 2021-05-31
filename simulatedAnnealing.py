@@ -47,6 +47,9 @@ def drop_or_add_items(next_state, weights, min_weight, max_weight):
 def fitness_of_individual(individual, values, weights):
     return np.sum(values[individual])
 
+def mutate(state,mutation_rate,n_items,weights,min_weight,max_weight):
+    state ^= np.array([np.random.uniform() < mutation_rate for _ in range(n_items)])
+    return drop_or_add_items(state, weights, min_weight, max_weight)
 
 def simulatedAnnealing(initial_temp=1000, alpha=0.999, frozen_level=0.1, n_items=16, values=[], weights=[], max_weight=3, min_weight=None, starting_state=None):
     min_weight = max_weight - 1 if min_weight is None else min_weight
@@ -60,10 +63,7 @@ def simulatedAnnealing(initial_temp=1000, alpha=0.999, frozen_level=0.1, n_items
     while temperature > frozen_level:
         it += 1
         next_state = np.copy(current_state)
-        next_state ^= np.array(
-            [np.random.uniform() < temperature/initial_temp for _ in range(n_items)])
-        next_state = drop_or_add_items(
-            next_state, weights, min_weight, max_weight)
+        next_state = mutate(next_state, temperature/initial_temp, n_items, weights, min_weight, max_weight)
 
         scores_table.append(fitness(next_state))
 
